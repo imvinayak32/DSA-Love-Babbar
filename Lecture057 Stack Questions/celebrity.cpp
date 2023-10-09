@@ -13,57 +13,57 @@ class Solution
     public:
 
     //Function to find if there is a celebrity in the party or not.
-    int celebrity(vector<vector<int> >& M, int n) 
+    int celebrity(vector<vector<int> >& M, int size) 
     {
         stack<int> s;
         
-        for(int i=0; i<n; i++) {    //step1: push all element in stack
+        for(int i=0; i<size; i++) {    //step1: push all element in stack
             s.push(i);
         }   
         
-        while(s.size() > 1) {   //step2: get 2 elements and compare them
+        while(s.size() > 1) {   //step2: get 2 elements and compare them, for who knowns whom
             
-            int a = s.top();
+            int firstElement = s.top();
             s.pop();
-            int b = s.top();
+            int secondElement = s.top();
             s.pop();
             
-            if(knows(M,a,b,n)){
-                s.push(b);
+            if(knows(M,firstElement ,secondElement ,size)){
+                s.push(secondElement);
             }
             else
             {
-                s.push(a);
+                s.push(firstElement);
             }
         }
-        int ans = s.top();
-        //step3: single element in stack is potential celeb
-        //so verify it
+
+        int ans = s.top(); //step3: single element in stack is potential celebrity
         
+        //step4: so verify it, for true
+        // it's row should contain all 0's
+        // it's column should contain all 1's execpt for itself
+        
+        // Row check
         int zeroCount = 0;
         
-        for(int i=0; i<n; i++) {
+        for(int i = 0; i < size; i++) {
             if(M[ans][i] == 0)
                 zeroCount++;
         }
+        if(zeroCount != size) return -1;
         
-        //all zeroes
-        if(zeroCount != n)
-            return -1;
-        
-        //column check
+
+        // Column check
         int oneCount = 0;
         
-        for(int i=0; i<n; i++) {
+        for(int i = 0; i < size; i++) {
             if(M[i][ans] == 1)
                 oneCount++;
         }
+        if(oneCount != size-1) return -1;
         
-        if(oneCount != n-1)
-            return -1;
-        
+
         return ans;
-        
     }
 };
 
